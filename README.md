@@ -12,5 +12,7 @@ an attacker when he holds a copy of your database.
 in order to install this to your keepass you need to copy all the exe and dll files to your keepass installation directory.
 inside that directory you will find a folder 'plugins', just past them there and restart keepass.
 
+once you started keepass go to tools and find the text "Cipher" on older versions it is called "QR code".
+
 ### Contributions
 Contributions are always welcome.
