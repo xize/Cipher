@@ -68,7 +68,6 @@
       <DependentUpon>CipherResult.cs</DependentUpon>
     </Compile>
     <Compile Include="src\encryption\Crypto.cs" />
-    <Compile Include="src\KeepassPlugin.cs" />
     <Compile Include="src\libs\zxing\QRCode.cs" />
     <Compile Include="src\Window.cs">
       <SubType>Form</SubType>
