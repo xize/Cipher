@@ -41,7 +41,7 @@ namespace QRCipher
 
             // Add menu item 'Do Something'
             this.m_tsmiMenuItem = new ToolStripMenuItem();
-            this.m_tsmiMenuItem.Text = "QR code";
+            this.m_tsmiMenuItem.Text = "Cipher";
             this.m_tsmiMenuItem.Click += this.OnMenuDoSomething;
             tsMenu.Add(m_tsmiMenuItem);
             return true;
