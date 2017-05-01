@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Cipher")]
-[assembly: AssemblyDescription("a program to cipher texts with phrases")]
+[assembly: AssemblyTitle("QRCipher")]
+[assembly: AssemblyDescription("an otp secret encrypter")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("xize")]
-[assembly: AssemblyProduct("Cipher")]
+[assembly: AssemblyCompany("QRCipher")]
+[assembly: AssemblyProduct("KeePass Plugin")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("8ef8ce34-c4be-4036-bc25-f92af718f153")]
+[assembly: Guid("bd6e6dcc-fb4f-44a2-89b5-72871489ebb4")]
 
 // Version information for an assembly consists of the following four values:
 //
