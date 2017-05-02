@@ -77,6 +77,7 @@
             this.code.ForeColor = System.Drawing.Color.White;
             this.code.Location = new System.Drawing.Point(0, 42);
             this.code.Name = "code";
+            this.code.ReadOnly = true;
             this.code.Size = new System.Drawing.Size(97, 20);
             this.code.TabIndex = 0;
             this.code.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
