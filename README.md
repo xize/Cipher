@@ -18,10 +18,12 @@ As for now this plugin does not serve much of a purpose since it only opens the 
 
 But we are planning to add a couple of features such as:
 
-- adding a new button inside the entry context menu(the menu when you right click to create entries):    
+- adding a new button inside the entry context menu(the menu when you right click to create entries):  
+  
 when a user has selected any entry and right clicks it and presses this new button he is able to write a cipher this cipher will replace the password field in keepass.
 
 - adding a more safer way to recover in case the phrase was written wrong:    
+
 when a user is inside this wizard to write a cipher, the plugin will automaticly make a copy from the vanilla database.    
 when the user has filled in his secret phrase he will be asked to decipher it, if the deciphering fails the vanilla database will be placed back.
 
