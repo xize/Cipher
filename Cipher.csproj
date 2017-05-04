@@ -111,10 +111,10 @@
     <None Include="src\App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="icon.ico" />
-    <Content Include="QRCipher.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Content Include="CipherKeepass.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="icon.ico" />
     <Content Include="zxing.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
