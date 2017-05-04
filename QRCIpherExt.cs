@@ -34,7 +34,7 @@ namespace QRCipher
         public override bool Initialize(IPluginHost pl)
         {
             this.pl = pl;
-            this.pl.MainWindow.EntryContextMenu.BackColor = Color.Black;
+            //this.pl.MainWindow.EntryContextMenu.BackColor = Color.Black;
 
             object[] toolstripdata = addMenuItem("Cipher", OnMenuDoSomething);
 
