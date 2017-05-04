@@ -20,31 +20,54 @@ using System.Threading.Tasks;
 using KeePass.Plugins;
 using System.Windows.Forms;
 using Cipher;
+using System.Drawing;
 
 namespace QRCipher
 {
     public class QRCipherExt : Plugin
     {
 
-        private IPluginHost m_host = null;
-        private ToolStripMenuItem m_tsmiMenuItem;
-        private ToolStripSeparator m_tsSeparator;
+        private IPluginHost pl = null;
+        private ToolStripMenuItem menuitem;
+        private ToolStripSeparator menuseperator;
 
-        public override bool Initialize(IPluginHost host)
+        public override bool Initialize(IPluginHost pl)
         {
-            this.m_host = host;
-            // Get a reference to the 'Tools' menu item container
-            ToolStripItemCollection tsMenu = m_host.MainWindow.ToolsMenu.DropDownItems;
+            this.pl = pl;
+            this.pl.MainWindow.EntryContextMenu.BackColor = Color.Black;
 
-            this.m_tsSeparator = new ToolStripSeparator();
-            tsMenu.Add(m_tsSeparator);
+            object[] toolstripdata = addMenuItem("Cipher", OnMenuDoSomething);
 
-            // Add menu item 'Do Something'
-            this.m_tsmiMenuItem = new ToolStripMenuItem();
-            this.m_tsmiMenuItem.Text = "Cipher";
-            this.m_tsmiMenuItem.Click += this.OnMenuDoSomething;
-            tsMenu.Add(m_tsmiMenuItem);
+            this.menuitem = (ToolStripMenuItem)toolstripdata[1];
+            this.menuseperator = (ToolStripSeparator)toolstripdata[0];
+
             return true;
+        }
+
+        public override void Terminate()
+        {
+            removeMenuItem(menuitem, menuseperator, OnMenuDoSomething);
+        }
+
+        private object[] addMenuItem(string name, EventHandler e)
+        {
+            ToolStripItemCollection menu = pl.MainWindow.ToolsMenu.DropDownItems;
+            ToolStripSeparator seperator = new ToolStripSeparator();
+            menu.Add(seperator);
+            ToolStripMenuItem item = new ToolStripMenuItem();
+            item.Text = name;
+            item.Click += e;
+            item.Image = new Window().Icon.ToBitmap();
+            menu.Add(item);
+            return new object[] { seperator, item };
+        }
+
+        private void removeMenuItem(ToolStripMenuItem item, ToolStripSeparator seperator, EventHandler e)
+        {
+            ToolStripItemCollection menu = pl.MainWindow.ToolsMenu.DropDownItems;
+            item.Click -= e;
+            menu.Remove(seperator);
+            menu.Remove(item);
         }
 
         private void OnMenuDoSomething(object sender, EventArgs e)
@@ -52,14 +75,5 @@ namespace QRCipher
             Window window = new Window();
             window.Show();
         }
-
-        public override void Terminate()
-        {
-            ToolStripItemCollection tsMenu = m_host.MainWindow.ToolsMenu.DropDownItems;
-            m_tsmiMenuItem.Click -= this.OnMenuDoSomething;
-            tsMenu.Remove(m_tsmiMenuItem);
-            tsMenu.Remove(m_tsSeparator);
-        }
-
     }
 }
