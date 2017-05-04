@@ -30,9 +30,28 @@ namespace Cipher.src.controls
 {
     public partial class CipherResult : UserControl
     {
+        private CipherTimer timer = new CipherTimer();
+        private CipherTask task;
+
         public CipherResult()
         {
             InitializeComponent();
+            code.Click += new EventHandler(code_selection);
+        }
+
+        private void code_selection(object sender, EventArgs e)
+        {
+            Clipboard.SetText(code.Text);
+            if (task != null)
+            {
+                task.run();
+                task.stop();
+                this.task = null;
+            }
+
+            this.task = new CipherTask(timer, 30);
+            this.task.start();
+
         }
 
         private void panel2_Paint(object sender, PaintEventArgs e)
@@ -40,12 +59,18 @@ namespace Cipher.src.controls
 
         }
 
-        /*
-        public string setText
+        private void code_TextChanged(object sender, EventArgs e)
         {
-            set {  }
-            get { return this. }
+
         }
-        */
+
+    }
+
+    class CipherTimer : CipherRunnable
+    {
+        public void run()
+        {
+            Clipboard.Clear();
+        }
     }
 }

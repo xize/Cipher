@@ -81,6 +81,7 @@
             this.code.Size = new System.Drawing.Size(97, 20);
             this.code.TabIndex = 0;
             this.code.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.code.TextChanged += new System.EventHandler(this.code_TextChanged);
             // 
             // label1
             // 
