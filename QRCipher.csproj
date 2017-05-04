@@ -7,8 +7,8 @@
     <ProjectGuid>{BD6E6DCC-FB4F-44A2-89B5-72871489EBB4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>QRCipher</RootNamespace>
-    <AssemblyName>QRCipher</AssemblyName>
+    <RootNamespace>CipherKeepass</RootNamespace>
+    <AssemblyName>CipherKeepass</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -54,7 +54,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="QRCIpherExt.cs" />
+    <Compile Include="CipherKeepassExt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

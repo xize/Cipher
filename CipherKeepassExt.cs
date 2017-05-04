@@ -22,9 +22,9 @@ using System.Windows.Forms;
 using Cipher;
 using System.Drawing;
 
-namespace QRCipher
+namespace CipherKeepass
 {
-    public class QRCipherExt : Plugin
+    public class CipherKeepassExt : Plugin
     {
 
         private IPluginHost pl = null;
