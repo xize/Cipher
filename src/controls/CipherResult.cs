@@ -26,7 +26,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Cipher.src.controls
+namespace Cipher
 {
     public partial class CipherResult : UserControl
     {

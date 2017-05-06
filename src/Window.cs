@@ -1,5 +1,4 @@
-﻿using Cipher.src.encryption;
-using Cipher.src.libs.QRnet;
+﻿using Cipher.src.libs.QRnet;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -69,6 +68,11 @@ namespace Cipher
             {
                 MessageBox.Show("both fields \"text\" and \"phrase\" needs to be filled in!", "Error!");
             }
+        }
+
+        private void Window_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

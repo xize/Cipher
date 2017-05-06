@@ -38,7 +38,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.cipherResult1 = new Cipher.src.controls.CipherResult();
+            this.cipherResult1 = new CipherResult();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -156,6 +156,7 @@
             this.Name = "Window";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Cipher by Xize";
+            this.Load += new System.EventHandler(this.Window_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
@@ -173,7 +174,7 @@
         private System.Windows.Forms.Button button3;
         public System.Windows.Forms.TextBox textBox1;
         public System.Windows.Forms.TextBox textBox2;
-        public src.controls.CipherResult cipherResult1;
+        public CipherResult cipherResult1;
     }
 }
 
