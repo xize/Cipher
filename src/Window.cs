@@ -1,4 +1,5 @@
-﻿using Cipher.src.libs.QRnet;
+﻿using Cipher.src.encryption;
+using Cipher.src.libs.zxing;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Cipher
+namespace Cipher.src
 {
     public partial class Window : Form
     {

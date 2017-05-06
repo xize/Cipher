@@ -26,7 +26,7 @@ using System.Threading.Tasks;
 using ZXing;
 using ZXing.Common;
 
-namespace Cipher.src.libs.QRnet
+namespace Cipher.src.libs.zxing
 {
     class QRCode
     {
