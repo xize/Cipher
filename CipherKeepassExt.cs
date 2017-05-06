@@ -30,6 +30,7 @@ namespace CipherKeepass
         private IPluginHost pl = null;
         private ToolStripMenuItem menuitem;
         private ToolStripSeparator menuseperator;
+        private static Icon ico = new Window().Icon;
 
         public override bool Initialize(IPluginHost pl)
         {
@@ -57,7 +58,7 @@ namespace CipherKeepass
             ToolStripMenuItem item = new ToolStripMenuItem();
             item.Text = name;
             item.Click += e;
-            item.Image = new Window().Icon.ToBitmap();
+            item.Image = ico.ToBitmap();
             menu.Add(item);
             return new object[] { seperator, item };
         }
@@ -72,8 +73,90 @@ namespace CipherKeepass
 
         private void OnMenuDoSomething(object sender, EventArgs e)
         {
-            Window window = new Window();
-            window.Show();
+            CipherEntry a = new CipherEntry();
+            a.Show();
+            ///Window window = new Window();
+            ///window.Show();
+        }
+
+        public static Icon getIcon()
+        {
+            return ico;
+        }
+    }
+
+    class CipherEntry : Form
+    {
+
+        private Label textboxtext;
+        private TextBox phrase;
+        private Panel panel;
+        private Button nextbtn;
+
+        public CipherEntry()
+        {
+            initialize();
+        }
+
+        private void initialize()
+        {
+            this.Height = 200;
+            this.Width = 500;
+            this.Text = "Cipher the password with a secret phrase!";
+            this.Icon = CipherKeepassExt.getIcon();
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            this.StartPosition = FormStartPosition.CenterScreen;
+
+            this.textboxtext = new Label();
+            this.textboxtext.Text = "secret phrase: ";
+            this.textboxtext.Dock = DockStyle.Left;
+
+            this.phrase = new TextBox();
+            this.phrase.PasswordChar = '*';
+            this.phrase.Text = "password";
+            this.phrase.BackColor = Color.White;
+            this.phrase.Dock = DockStyle.Left;
+
+            this.nextbtn = new Button();
+            this.nextbtn.Text = "Next";
+            this.nextbtn.Dock = DockStyle.Bottom;
+            this.nextbtn.Click += new EventHandler(btnOnClick);
+
+            this.panel = new Panel();
+            this.panel.Left = 125;
+            this.panel.Top = 50;
+            this.panel.Height = 20;
+            this.panel.Controls.Add(phrase);
+            this.panel.Controls.Add(textboxtext);
+
+            this.Controls.Add(panel);
+            this.Controls.Add(nextbtn);
+
+            this.SuspendLayout();
+            this.ResumeLayout();
+        }
+
+        private void btnOnClick(Object sender, EventArgs e)
+        {
+            switch(nextbtn.Text)
+            {
+                case "next":
+                    //make copy of secret phrase
+                    string secret = nextbtn.Text;
+                    string rawtext = "test";
+                    string encrypted = Crypto.
+
+
+                    break;
+                case "back":
+
+                    break;
+                case "finish":
+                    break;
+                case default:
+                    nextbtn.Text = "next";
+                    break;
+            }
         }
     }
 }
