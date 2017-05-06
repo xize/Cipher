@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Cipher
+namespace Cipher.src.controls
 {
     interface CipherRunnable
     {

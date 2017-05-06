@@ -1,4 +1,4 @@
-﻿namespace Cipher
+﻿namespace Cipher.src.controls
 {
     partial class CipherResult
     {

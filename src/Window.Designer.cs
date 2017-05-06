@@ -1,4 +1,6 @@
-﻿namespace Cipher
+﻿using Cipher.src.controls;
+
+namespace Cipher.src
 {
     partial class Window
     {
