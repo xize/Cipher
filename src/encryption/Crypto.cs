@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Cipher
 {
-    class Crypto
+    public class Crypto
     {
 
 
