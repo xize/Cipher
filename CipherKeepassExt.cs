@@ -19,8 +19,9 @@ using System.Text;
 using System.Threading.Tasks;
 using KeePass.Plugins;
 using System.Windows.Forms;
-using Cipher;
 using System.Drawing;
+using Cipher.src.encryption;
+using Cipher.src;
 
 namespace CipherKeepass
 {
