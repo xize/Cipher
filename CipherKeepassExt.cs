@@ -138,23 +138,19 @@ namespace CipherKeepass
 
         private void btnOnClick(Object sender, EventArgs e)
         {
+
             switch(nextbtn.Text)
             {
                 case "next":
                     //make copy of secret phrase
                     string secret = nextbtn.Text;
                     string rawtext = "test";
-                    string encrypted = Crypto.
-
 
                     break;
                 case "back":
 
                     break;
                 case "finish":
-                    break;
-                case default:
-                    nextbtn.Text = "next";
                     break;
             }
         }

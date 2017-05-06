@@ -33,8 +33,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cipher">
-      <HintPath>..\..\Cipher\Cipher\bin\Debug\Cipher.exe</HintPath>
+    <Reference Include="Cipher, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Cipher.exe</HintPath>
     </Reference>
     <Reference Include="KeePass">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\KeePass Password Safe 2\KeePass.exe</HintPath>
