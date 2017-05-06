@@ -146,6 +146,8 @@ namespace CipherKeepass
                     string secret = nextbtn.Text;
                     string rawtext = "test";
 
+                    string encrypted = Crypto.Encrypt(rawtext, secret);
+
                     break;
                 case "back":
 
