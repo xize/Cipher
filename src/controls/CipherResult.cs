@@ -23,35 +23,40 @@ using System.Drawing;
 using System.Data;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Cipher.src.controls
 {
     public partial class CipherResult : UserControl
     {
-        private CipherTimer timer = new CipherTimer();
-        private CipherTask task;
 
         public CipherResult()
         {
             InitializeComponent();
-            code.Click += new EventHandler(code_selection);
+            code.Click += new EventHandler(code_selectionAsync);
         }
 
-        private void code_selection(object sender, EventArgs e)
+        private async void code_selectionAsync(object sender, EventArgs e)
         {
-            Clipboard.SetText(code.Text);
-            if (task != null)
+            if (code.Text.Length == 0)
             {
-                task.run();
-                task.stop();
-                this.task = null;
+                return;
             }
 
-            this.task = new CipherTask(timer, 30);
-            this.task.start();
+            Clipboard.SetText(code.Text);
 
+            MessageBox.Show("text has been copied for "+18000+" milliseconds!", "the text has been copied!");
+
+            await Task.Delay(18000);
+            Clipboard.Clear();
+
+        }
+
+        private void clear(object o)
+        {
+            Clipboard.Clear();
         }
 
         private void panel2_Paint(object sender, PaintEventArgs e)
@@ -64,13 +69,5 @@ namespace Cipher.src.controls
 
         }
 
-    }
-
-    class CipherTimer : CipherRunnable
-    {
-        public void run()
-        {
-            Clipboard.Clear();
-        }
     }
 }
