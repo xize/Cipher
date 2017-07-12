@@ -75,7 +75,7 @@
             this.code.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.code.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.code.ForeColor = System.Drawing.Color.White;
-            this.code.Location = new System.Drawing.Point(0, 83);
+            this.code.Location = new System.Drawing.Point(-3, 55);
             this.code.Name = "code";
             this.code.ReadOnly = true;
             this.code.Size = new System.Drawing.Size(130, 20);
