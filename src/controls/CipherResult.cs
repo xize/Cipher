@@ -32,8 +32,6 @@ namespace Cipher.src.controls
     public partial class CipherResult : UserControl
     {
 
-        private volatile string codea;
-
         public CipherResult()
         {
             InitializeComponent();
@@ -47,9 +45,7 @@ namespace Cipher.src.controls
                 return;
             }
 
-            this.codea = code.Text;
-
-            Clipboard.SetText(codea);
+            Clipboard.SetText(code.Text);
             await Task.Delay(5000);
             Clipboard.Clear();
 
