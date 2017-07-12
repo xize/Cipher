@@ -23,39 +23,41 @@ using System.Drawing;
 using System.Data;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Cipher.src.controls
 {
     public partial class CipherResult : UserControl
     {
-        private CipherTimer timer = new CipherTimer();
-        private CipherTask task;
+
+        private volatile string codea;
 
         public CipherResult()
         {
             InitializeComponent();
-            code.Click += new EventHandler(code_selection);
+            code.Click += new EventHandler(code_selectionAsync);
         }
 
-        private void code_selection(object sender, EventArgs e)
+        private async void code_selectionAsync(object sender, EventArgs e)
         {
             if (code.Text.Length == 0)
             {
                 return;
             }
-            Clipboard.SetText(code.Text);
-            if (task != null)
-            {
-                task.run();
-                task.stop();
-                this.task = null;
-            }
 
-            this.task = new CipherTask(timer, 30);
-            this.task.start();
+            this.codea = code.Text;
 
+            Clipboard.SetText(codea);
+            await Task.Delay(5000);
+            Clipboard.Clear();
+
+        }
+
+        private void clear(object o)
+        {
+            Clipboard.Clear();
         }
 
         private void panel2_Paint(object sender, PaintEventArgs e)
@@ -68,13 +70,5 @@ namespace Cipher.src.controls
 
         }
 
-    }
-
-    class CipherTimer : CipherRunnable
-    {
-        public void run()
-        {
-            Clipboard.Clear();
-        }
     }
 }

@@ -67,8 +67,6 @@
     <Compile Include="src\controls\CipherResult.Designer.cs">
       <DependentUpon>CipherResult.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\controls\CipherRunnable.cs" />
-    <Compile Include="src\controls\CipherTask.cs" />
     <Compile Include="src\encryption\Crypto.cs" />
     <Compile Include="src\libs\zxing\QRCode.cs" />
     <Compile Include="src\Window.cs">
