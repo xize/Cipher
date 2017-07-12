@@ -46,7 +46,10 @@ namespace Cipher.src.controls
             }
 
             Clipboard.SetText(code.Text);
-            await Task.Delay(5000);
+
+            MessageBox.Show("text has been copied for "+18000+" milliseconds!", "the text has been copied!");
+
+            await Task.Delay(18000);
             Clipboard.Clear();
 
         }
