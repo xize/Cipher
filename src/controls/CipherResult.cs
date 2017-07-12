@@ -41,6 +41,10 @@ namespace Cipher.src.controls
 
         private void code_selection(object sender, EventArgs e)
         {
+            if (code.Text.Length == 0)
+            {
+                return;
+            }
             Clipboard.SetText(code.Text);
             if (task != null)
             {
