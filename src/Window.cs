@@ -25,7 +25,7 @@ namespace Cipher.src
             cipherResult1.code.Hide();
             if (textBox1.Text.Length > 0 && textBox2.Text.Length > 0)
             {
-                cipherResult1.qrpanel.BackgroundImage = QRCode.getFactory().generateQR(Crypto.Decrypt(textBox1.Text, textBox2.Text), 100, 100);
+                cipherResult1.qrpanel.BackgroundImage = QRCode.getFactory().generateQR(Crypto.Decrypt(textBox1.Text, textBox2.Text), 130, 130);
             } else
             {
                 MessageBox.Show("both fields \"text\" and \"phrase\" needs to be filled in!", "Error!");
