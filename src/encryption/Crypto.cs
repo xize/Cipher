@@ -1,16 +1,19 @@
 ﻿//this class comes from stackoverflow but I lost the page, I do not own credit to this code.
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ZXing;
+using ZXing.Common;
 
 namespace Cipher.src.encryption
 {
-    class Crypto
+    public class Crypto
     {
 
 
@@ -66,7 +69,7 @@ namespace Cipher.src.encryption
             try
             {
                 cipherTextBytesWithSaltAndIv = Convert.FromBase64String(cipherText);
-            } catch(FormatException)
+            } catch(System.FormatException)
             {
                 MessageBox.Show("not a valid cipher text to be decrypted","error: cipher not recognized!");
                 return "";
@@ -129,4 +132,5 @@ namespace Cipher.src.encryption
 
 
     }
+
 }

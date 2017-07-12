@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.If not, see<http://www.gnu.org/licenses/>.
 */
-using Cipher.src.controls;
+using Cipher;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -26,7 +26,7 @@ using System.Threading.Tasks;
 using ZXing;
 using ZXing.Common;
 
-namespace Cipher.src.libs.QRnet
+namespace Cipher.src.libs.zxing
 {
     class QRCode
     {

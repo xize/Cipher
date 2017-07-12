@@ -1,4 +1,6 @@
-﻿namespace Cipher
+﻿using Cipher.src.controls;
+
+namespace Cipher.src
 {
     partial class Window
     {
@@ -137,25 +139,25 @@
             // 
             // cipherResult1
             // 
-            this.cipherResult1.Dock = System.Windows.Forms.DockStyle.Left;
             this.cipherResult1.Location = new System.Drawing.Point(0, 137);
             this.cipherResult1.Name = "cipherResult1";
-            this.cipherResult1.Size = new System.Drawing.Size(284, 170);
+            this.cipherResult1.Size = new System.Drawing.Size(284, 213);
             this.cipherResult1.TabIndex = 1;
             // 
             // Window
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 307);
+            this.ClientSize = new System.Drawing.Size(284, 347);
             this.Controls.Add(this.cipherResult1);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(300, 346);
+            this.MaximumSize = new System.Drawing.Size(300, 386);
             this.Name = "Window";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Cipher by Xize";
+            this.Load += new System.EventHandler(this.Window_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
@@ -173,7 +175,7 @@
         private System.Windows.Forms.Button button3;
         public System.Windows.Forms.TextBox textBox1;
         public System.Windows.Forms.TextBox textBox2;
-        public src.controls.CipherResult cipherResult1;
+        private CipherResult cipherResult1;
     }
 }
 

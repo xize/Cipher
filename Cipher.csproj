@@ -67,6 +67,8 @@
     <Compile Include="src\controls\CipherResult.Designer.cs">
       <DependentUpon>CipherResult.cs</DependentUpon>
     </Compile>
+    <Compile Include="src\controls\CipherRunnable.cs" />
+    <Compile Include="src\controls\CipherTask.cs" />
     <Compile Include="src\encryption\Crypto.cs" />
     <Compile Include="src\libs\zxing\QRCode.cs" />
     <Compile Include="src\Window.cs">
@@ -109,10 +111,10 @@
     <None Include="src\App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="icon.ico" />
-    <Content Include="QRCipher.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Content Include="CipherKeepass.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="icon.ico" />
     <Content Include="zxing.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

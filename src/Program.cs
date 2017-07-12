@@ -22,14 +22,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Cipher
+namespace Cipher.src
 {
     static class Program
     {
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-        [STAThread]
+        //[STAThread]
         static void Main()
         {
             Application.EnableVisualStyles();

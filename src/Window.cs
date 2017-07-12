@@ -1,5 +1,5 @@
 ﻿using Cipher.src.encryption;
-using Cipher.src.libs.QRnet;
+using Cipher.src.libs.zxing;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Cipher
+namespace Cipher.src
 {
     public partial class Window : Form
     {
@@ -25,7 +25,7 @@ namespace Cipher
             cipherResult1.code.Hide();
             if (textBox1.Text.Length > 0 && textBox2.Text.Length > 0)
             {
-                cipherResult1.qrpanel.BackgroundImage = QRCode.getFactory().generateQR(Crypto.Decrypt(textBox1.Text, textBox2.Text), 100, 100);
+                cipherResult1.qrpanel.BackgroundImage = QRCode.getFactory().generateQR(Crypto.Decrypt(textBox1.Text, textBox2.Text), 130, 130);
             } else
             {
                 MessageBox.Show("both fields \"text\" and \"phrase\" needs to be filled in!", "Error!");
@@ -69,6 +69,11 @@ namespace Cipher
             {
                 MessageBox.Show("both fields \"text\" and \"phrase\" needs to be filled in!", "Error!");
             }
+        }
+
+        private void Window_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

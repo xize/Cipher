@@ -43,11 +43,11 @@
             this.panel1.BackColor = System.Drawing.Color.DimGray;
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Controls.Add(this.label1);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.ForeColor = System.Drawing.Color.DimGray;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(284, 170);
+            this.panel1.Size = new System.Drawing.Size(284, 213);
             this.panel1.TabIndex = 0;
             // 
             // panel2
@@ -57,16 +57,16 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel2.Location = new System.Drawing.Point(0, 16);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(284, 154);
+            this.panel2.Size = new System.Drawing.Size(284, 197);
             this.panel2.TabIndex = 1;
             this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
             // 
             // qrpanel
             // 
             this.qrpanel.Controls.Add(this.code);
-            this.qrpanel.Location = new System.Drawing.Point(88, 21);
+            this.qrpanel.Location = new System.Drawing.Point(71, 35);
             this.qrpanel.Name = "qrpanel";
-            this.qrpanel.Size = new System.Drawing.Size(100, 100);
+            this.qrpanel.Size = new System.Drawing.Size(130, 130);
             this.qrpanel.TabIndex = 0;
             // 
             // code
@@ -75,11 +75,13 @@
             this.code.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.code.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.code.ForeColor = System.Drawing.Color.White;
-            this.code.Location = new System.Drawing.Point(0, 42);
+            this.code.Location = new System.Drawing.Point(-3, 55);
             this.code.Name = "code";
-            this.code.Size = new System.Drawing.Size(97, 20);
+            this.code.ReadOnly = true;
+            this.code.Size = new System.Drawing.Size(130, 20);
             this.code.TabIndex = 0;
             this.code.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.code.TextChanged += new System.EventHandler(this.code_TextChanged);
             // 
             // label1
             // 
@@ -98,7 +100,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panel1);
             this.Name = "CipherResult";
-            this.Size = new System.Drawing.Size(284, 170);
+            this.Size = new System.Drawing.Size(284, 213);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
