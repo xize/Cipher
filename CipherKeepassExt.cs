@@ -26,6 +26,9 @@ using KeePassLib;
 using KeePassLib.Collections;
 using KeePassLib.Security;
 using System.IO;
+using Cipher.src.libs.zxing;
+using ZXing;
+using ZXing.Common;
 
 namespace CipherKeepass
 {
@@ -441,14 +444,34 @@ namespace CipherKeepass
 
             string pass = Crypto.Decrypt(password, this.phrase.Text);
 
-            if (otpcheckbox.Checked)
+            if (pass.Length == 0)
             {
-
+                return;
             }
-            else
+
+            string formatQR = (!otpcheckbox.Checked ? Crypto.Decrypt(password, phrase.Text) : "otpauth://totp/" + servicetextbox.Text + ":" + accounttextbox.Text + "?secret=" + Crypto.Decrypt(password, phrase.Text) + "&issuer=" + servicetextbox.Text);
+         
+            this.picture.Image = generateQR(formatQR, 130, 130);
+        }
+
+        public Image generateQR(string text, int width, int height)
+        {
+            if (text.Length == 0)
             {
-
+                return null;
             }
+            BarcodeWriter writer = new BarcodeWriter
+            {
+                Format = BarcodeFormat.QR_CODE,
+                Options = new EncodingOptions
+                {
+                    Height = height,
+                    Width = width,
+                    Margin = 0
+                }
+            };
+
+            return writer.Write(text);
         }
     }
 
