@@ -28,7 +28,7 @@ using ZXing.Common;
 
 namespace Cipher.src.libs.zxing
 {
-    class QRCode
+    public class QRCode
     {
 
         private static QRCode qr;
