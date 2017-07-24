@@ -69,6 +69,9 @@
     </Compile>
     <Compile Include="src\encryption\Crypto.cs" />
     <Compile Include="src\libs\zxing\QRCode.cs" />
+    <Compile Include="src\QRPrompt.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="src\Window.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -79,6 +82,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="src\controls\CipherResult.resx">
       <DependentUpon>CipherResult.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\QRPrompt.resx">
+      <DependentUpon>QRPrompt.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\Window.resx">
       <DependentUpon>Window.cs</DependentUpon>

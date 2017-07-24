@@ -14,21 +14,35 @@ namespace Cipher.src
 {
     public partial class Window : Form
     {
+        private QRPrompt qrprompt;
+
         public Window()
         {
             InitializeComponent();
+            if(this.qrprompt == null)
+            {
+                this.qrprompt = new QRPrompt();
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             cipherResult1.code.Text = ""; //clear it.
             cipherResult1.code.Hide();
-            if (textBox1.Text.Length > 0 && textBox2.Text.Length > 0)
+
+            DialogResult r = qrprompt.ShowDialog();
+            if(r == DialogResult.OK)
             {
-                cipherResult1.qrpanel.BackgroundImage = QRCode.getFactory().generateQR(Crypto.Decrypt(textBox1.Text, textBox2.Text), 130, 130);
-            } else
-            {
-                MessageBox.Show("both fields \"text\" and \"phrase\" needs to be filled in!", "Error!");
+                string formatQR = (qrprompt.GetAccount() == null ? Crypto.Decrypt(textBox1.Text, textBox2.Text) : "otpauth://totp/" + qrprompt.GetServiceName() + ":" + qrprompt.GetAccount() + "?secret="+ Crypto.Decrypt(textBox1.Text, textBox2.Text) + "&issuer=" + qrprompt.GetServiceName());
+
+                if (textBox1.Text.Length > 0 && textBox2.Text.Length > 0)
+                {
+                    cipherResult1.qrpanel.BackgroundImage = QRCode.getFactory().generateQR(formatQR, 130, 130);
+                }
+                else
+                {
+                    MessageBox.Show("both fields \"text\" and \"phrase\" needs to be filled in!", "Error!");
+                }
             }
         }
 
