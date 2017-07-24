@@ -37,7 +37,7 @@ namespace Cipher.src.libs.zxing
 
         public Image generateQR(string text, int width, int height)
         {
-            if(text.Length == 0)
+            if (text.Length == 0)
             {
                 return null;
             }
