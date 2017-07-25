@@ -155,54 +155,14 @@ namespace CipherKeepass
 
     class DeCipher : Form
     {
-
-        private Label textboxtext;
         public TextBox phrase;
-        private Panel panel;
         private Button nextbtn;
+        private Label label1;
         private string pass;
 
         public DeCipher()
         {
-            initialize();
-        }
-
-        private void initialize()
-        {
-            this.Height = 200;
-            this.Width = 500;
-            this.Text = "fill in your secret phrase in order to decrypt!";
-            this.Icon = CipherKeepassExt.getIcon();
-            this.FormBorderStyle = FormBorderStyle.FixedSingle;
-            this.StartPosition = FormStartPosition.CenterScreen;
-
-            this.textboxtext = new Label();
-            this.textboxtext.Text = "secret phrase: ";
-            this.textboxtext.Dock = DockStyle.Left;
-
-            this.phrase = new TextBox();
-            this.phrase.PasswordChar = '*';
-            this.phrase.Text = "password";
-            this.phrase.BackColor = Color.White;
-            this.phrase.Dock = DockStyle.Left;
-
-            this.nextbtn = new Button();
-            this.nextbtn.Text = "decrypt!";
-            this.nextbtn.Dock = DockStyle.Bottom;
-            this.nextbtn.Click += new EventHandler(btnOnClick);
-
-            this.panel = new Panel();
-            this.panel.Left = 125;
-            this.panel.Top = 50;
-            this.panel.Height = 20;
-            this.panel.Controls.Add(phrase);
-            this.panel.Controls.Add(textboxtext);
-
-            this.Controls.Add(panel);
-            this.Controls.Add(nextbtn);
-
-            this.SuspendLayout();
-            this.ResumeLayout();
+            InitializeComponent();
         }
 
         public void SetEncryptedPassword(string pass)
@@ -213,7 +173,7 @@ namespace CipherKeepass
         private async void btnOnClick(Object sender, EventArgs e)
         {
             string password = Crypto.Decrypt(pass, phrase.Text);
-            if(password.Length == 0)
+            if (password.Length == 0)
             {
                 return;
             }
@@ -223,9 +183,57 @@ namespace CipherKeepass
             await Task.Delay(18000);
             Clipboard.Clear();
         }
+
+        private void InitializeComponent()
+        {
+            this.label1 = new System.Windows.Forms.Label();
+            this.phrase = new System.Windows.Forms.TextBox();
+            this.nextbtn = new System.Windows.Forms.Button();
+            this.SuspendLayout();
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(13, 13);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(74, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "secret phrase:";
+            // 
+            // phrase
+            // 
+            this.phrase.Location = new System.Drawing.Point(13, 30);
+            this.phrase.Name = "phrase";
+            this.phrase.PasswordChar = '*';
+            this.phrase.Size = new System.Drawing.Size(100, 20);
+            this.phrase.TabIndex = 1;
+            // 
+            // nextbtn
+            // 
+            this.nextbtn.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.nextbtn.Location = new System.Drawing.Point(0, 64);
+            this.nextbtn.Name = "nextbtn";
+            this.nextbtn.Size = new System.Drawing.Size(124, 23);
+            this.nextbtn.TabIndex = 2;
+            this.nextbtn.Text = "decrypt";
+            this.nextbtn.UseVisualStyleBackColor = true;
+            this.nextbtn.Click += new EventHandler(btnOnClick);
+            // 
+            // Gui
+            // 
+            this.ClientSize = new System.Drawing.Size(124, 87);
+            this.Controls.Add(this.nextbtn);
+            this.Controls.Add(this.phrase);
+            this.Controls.Add(this.label1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Name = "Gui";
+            this.Text = "Decrypt cipher";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Icon = CipherKeepassExt.getIcon();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+        }
     }
-
-
 
     class DeCipherQR : Form
     {
