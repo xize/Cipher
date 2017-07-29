@@ -39,18 +39,22 @@ namespace CipherKeepass
         private ToolStripMenuItem menuitem;
         private ToolStripSeparator menuseperator;
         private static Icon ico = new Window().Icon;
-        private DeCipher decipherwindow;
-        private DeCipherQR decipherwindowqr;
+
+        //private DeCipher decipherwindow;
+        ///private DeCipherQR decipherwindowqr;
+        //private Cipher cipherwindow;
 
         private ToolStripMenuItem decipher_pass;
         private ToolStripMenuItem decipher_as_qr;
+        private ToolStripMenuItem cipher;
+        private ToolStripMenuItem cipherren;
 
         public override bool Initialize(IPluginHost pl)
         {
             this.pl = pl;
-
-            this.decipherwindow = new DeCipher();
-            this.decipherwindowqr = new DeCipherQR();
+           // this.decipherwindow = new DeCipher();
+           // this.decipherwindowqr = new DeCipherQR();
+           // this.cipherwindow = new Cipher(pl);
 
             setupContextMenu();
 
@@ -64,7 +68,23 @@ namespace CipherKeepass
 
         private void setupContextMenu()
         {
-            ToolStripItemCollection menu = this.pl.MainWindow.EntryContextMenu.Items;
+            ToolStripItemCollection menu = pl.MainWindow.EntryContextMenu.Items;
+
+            menu.Add(new ToolStripSeparator());
+
+            this.cipher = new ToolStripMenuItem();
+            cipher.Enabled = true;
+            cipher.Text = "Cipher password";
+            cipher.Click += new EventHandler(Cipher_clickEvent);
+            cipher.Image = ico.ToBitmap();
+            menu.Add(cipher);
+
+            this.cipherren = new ToolStripMenuItem();
+            cipherren.Enabled = true;
+            cipherren.Text = "Change cipher";
+            cipherren.Click += new EventHandler(CipherrenEvent);
+            cipherren.Image = ico.ToBitmap();
+            menu.Add(cipherren);
 
             menu.Add(new ToolStripSeparator());
             this.decipher_pass = new ToolStripMenuItem();
@@ -82,9 +102,67 @@ namespace CipherKeepass
             menu.Add(decipher_as_qr);
         }
 
+        public bool IsCiphered()
+        {
+            PwEntry entry = pl.MainWindow.GetSelectedEntry(true);
+            if (entry != null)
+            {
+                return entry.HasTag("ciphered");
+            }
+            return false;
+        }
+
+        public void SetCipherStatus()
+        {
+            PwEntry entry = pl.MainWindow.GetSelectedEntry(true);
+            if (entry != null)
+            {
+               entry.AddTag("cipher");
+            }
+        }
+
+        public void RemoveCipherStatus()
+        {
+            PwEntry entry = pl.MainWindow.GetSelectedEntry(true);
+            if (entry != null)
+            {
+                if(entry.HasTag("cipher"))
+                {
+                    entry.RemoveTag("cipher");
+                }
+            }
+        }
+
+        private void CipherrenEvent(object sender, EventArgs args)
+        {
+            PwEntry entry = pl.MainWindow.GetSelectedEntry(true);
+            if (entry == null)
+            {
+                MessageBox.Show("the selection is empty!", "error no entry has been selected!");
+                return;
+            }
+            ProtectedString pass = entry.Strings.Get("Password");
+            ValidateCipher val = new ValidateCipher(new Cipher(this.pl), pass.ReadString());
+            val.Show();
+        }
+
+        private void Cipher_clickEvent(object sender, EventArgs args)
+        {
+            PwEntry entry = pl.MainWindow.GetSelectedEntry(true);
+            if (entry == null)
+            {
+                MessageBox.Show("the selection is empty!", "error no entry has been selected!");
+                return;
+            }
+            ProtectedString pass = entry.Strings.Get("Password");
+            Cipher cipherwindow = new Cipher(pl);
+            cipherwindow.SetPassword(pass.ReadString());
+            cipherwindow.ShowDialog();
+        }
+
         private void decipher_pass_ClickEvent(object sender, EventArgs args)
         {
-            PwEntry entry = this.pl.MainWindow.GetSelectedEntry(true);
+            PwEntry entry = pl.MainWindow.GetSelectedEntry(true);
             if(entry == null)
             {
                 MessageBox.Show("the selection is empty!", "error no entry has been selected!");
@@ -94,6 +172,7 @@ namespace CipherKeepass
             //ProtectedString user = entry.Strings.Get("UserName");
             ProtectedString pass = entry.Strings.Get("Password");
 
+            DeCipher decipherwindow = new DeCipher();
             decipherwindow.SetEncryptedPassword(pass.ReadString());
             decipherwindow.ShowDialog();
             
@@ -101,7 +180,7 @@ namespace CipherKeepass
 
         private void decipher_as_qr_ClickEvent(object sender, EventArgs args)
         {
-            PwEntry entry = this.pl.MainWindow.GetSelectedEntry(true);
+            PwEntry entry = pl.MainWindow.GetSelectedEntry(true);
             if (entry == null)
             {
                 MessageBox.Show("the selection is empty!", "error no entry has been selected!");
@@ -111,6 +190,7 @@ namespace CipherKeepass
             ProtectedString user = entry.Strings.Get("UserName");
             ProtectedString pass = entry.Strings.Get("Password");
 
+            DeCipherQR decipherwindowqr = new DeCipherQR();
             decipherwindowqr.SetEncryptedPassword(pass.ReadString());
             decipherwindowqr.ShowDialog();
         }
@@ -143,7 +223,7 @@ namespace CipherKeepass
 
         private void OnMenuDoSomething(object sender, EventArgs e)
         {
-            Window window = new Window();
+            Cipher window = new Cipher(pl);
             window.Show();
         }
 
@@ -483,5 +563,400 @@ namespace CipherKeepass
         }
     }
 
+    class Cipher : Form
+    {
+        private Label label1;
+        private TextBox textBox1;
+        private TextBox textBox2;
+        private Button button1;
+        private Label label3;
+        private Label label4;
+        private Label label2;
+        private string password;
+        private IPluginHost pl;
+        private ValidateAddedCipher validate;
 
+        public Cipher(IPluginHost pl)
+        {
+            this.pl = pl;
+            this.validate = new ValidateAddedCipher(this, pl);
+            InitializeComponent();
+        }
+
+        public void SetPassword(string password)
+        {
+            this.password = password;
+        }
+
+        private void InitializeComponent()
+        {
+            this.label1 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.SuspendLayout();
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(42, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "phrase:";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(12, 25);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.PasswordChar = '*';
+            this.textBox1.Size = new System.Drawing.Size(100, 20);
+            this.textBox1.TabIndex = 1;
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(12, 66);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.PasswordChar = '*';
+            this.textBox2.Size = new System.Drawing.Size(100, 20);
+            this.textBox2.TabIndex = 3;
+            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(12, 50);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(74, 13);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "retype phrase:";
+            // 
+            // button1
+            // 
+            this.button1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.button1.Location = new System.Drawing.Point(0, 97);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(143, 23);
+            this.button1.TabIndex = 4;
+            this.button1.Text = "Cipher password";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.Red;
+            this.label3.Location = new System.Drawing.Point(116, 28);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(15, 13);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "X";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.Color.Red;
+            this.label4.Location = new System.Drawing.Point(118, 69);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(15, 13);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "X";
+            // 
+            // Cipher
+            // 
+            this.ClientSize = new System.Drawing.Size(143, 120);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.label1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Name = "Cipher";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Cipher password";
+            this.Load += new System.EventHandler(this.Cipher_Load);
+            this.Visible = false;
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        private bool IsMatched()
+        {
+            return textBox1.Text == textBox2.Text && textBox1.Text.Length > 0 && textBox2.Text.Length > 0;
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            if (IsMatched())
+            {
+                label3.Text = "Y";
+                label3.ForeColor = Color.Green;
+                label4.Text = "Y";
+                label4.ForeColor = Color.Green;
+            }
+            else
+            {
+                label3.Text = "X";
+                label3.ForeColor = Color.Red;
+                label4.Text = "X";
+                label4.ForeColor = Color.Red;
+            }
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+            if (IsMatched())
+            {
+                label3.Text = "Y";
+                label3.ForeColor = Color.Green;
+                label4.Text = "Y";
+                label4.ForeColor = Color.Green;
+            }
+            else
+            {
+                label3.Text = "X";
+                label3.ForeColor = Color.Red;
+                label4.Text = "X";
+                label4.ForeColor = Color.Red;
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (IsMatched())
+            {
+                //encrypt the phrase with the password as a cipher.
+                string encrypted = Crypto.Encrypt(password, textBox1.Text);
+
+                //now place the encrypted password inside the validate window.
+                validate.SetCipher(encrypted);
+                this.Visible = false;
+                validate.Show();
+            }
+            else
+            {
+                MessageBox.Show("the secret phrases need to match or your decryption will fail!", "the phrases did not match!");
+            }
+            this.Visible = false;
+            this.DialogResult = DialogResult.OK;
+        }
+
+        private void Cipher_Load(object sender, EventArgs e)
+        {
+
+        }
+    }
+
+    class ValidateAddedCipher : Form
+    {
+        private Button button1;
+        private TextBox textBox1;
+        private Label label1;
+        private string cipher;
+        private Cipher cipherwindw;
+        private IPluginHost pl;
+
+        public ValidateAddedCipher(Cipher win, IPluginHost pl)
+        {
+            this.cipherwindw = win;
+            this.pl = pl;
+            InitializeComponent();
+           // this.FormClosing += new FormClosingEventHandler(DisableCloseEvent);
+        }
+
+        public void SetCipher(string cipher)
+        {
+            this.cipher = cipher;
+        }
+
+        private void InitializeComponent()
+        {
+            this.button1 = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.SuspendLayout();
+            // 
+            // button1
+            // 
+            this.button1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.button1.Location = new System.Drawing.Point(0, 62);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(143, 23);
+            this.button1.TabIndex = 4;
+            this.button1.Text = "test decryption";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(12, 29);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.PasswordChar = '*';
+            this.textBox1.Size = new System.Drawing.Size(119, 20);
+            this.textBox1.TabIndex = 5;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(13, 13);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(65, 13);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "re-type phrase:";
+            // 
+            // ValidateCipher
+            // 
+            this.ClientSize = new System.Drawing.Size(143, 85);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.button1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Name = "ValidateCipher";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Cipher password";
+            this.Visible = false;
+            this.Load += new System.EventHandler(this.Validate_Load);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        private void DisableCloseEvent(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void Validate_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private async void button1_Click(object sender, EventArgs e)
+        {
+            string decrypted = Crypto.Decrypt(this.cipher, textBox1.Text);
+            if (decrypted != null && decrypted.Length > 0)
+            {
+                //success
+                PwEntry entry = pl.MainWindow.GetSelectedEntry(true);
+                if (entry != null)
+                {
+                    MessageBox.Show("added the cipher to the clipboard please paste your cipher with ctrl+v in the password fields!", "success!");
+                    this.Visible = false;
+                    Clipboard.SetText(cipher, TextDataFormat.Text);
+                    await Task.Delay(18000);
+                    Clipboard.Clear();
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("no password entry has been checked!", "error!");
+                }
+            }
+            else
+            {
+                MessageBox.Show("failed to decrypt password, please redo the phrases!", "error!");
+                cipherwindw.Visible = true;
+            }
+            this.Visible = false;
+        }
+    }
+
+    class ValidateCipher : Form
+    {
+        private Button button1;
+        private TextBox textBox1;
+        private Label label1;
+        private string ciphertext;
+        private Cipher cipher;
+
+        public ValidateCipher(Cipher cipher, string ciphertext)
+        {
+            this.cipher = cipher;
+            this.ciphertext = ciphertext;
+            InitializeComponent();
+        }
+
+        private void InitializeComponent()
+        {
+            this.button1 = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.SuspendLayout();
+            // 
+            // button1
+            // 
+            this.button1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.button1.Location = new System.Drawing.Point(0, 62);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(143, 23);
+            this.button1.TabIndex = 4;
+            this.button1.Text = "decrypt!";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(12, 29);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.PasswordChar = '*';
+            this.textBox1.Size = new System.Drawing.Size(119, 20);
+            this.textBox1.TabIndex = 5;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(13, 13);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(65, 13);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "type your phrase:";
+            // 
+            // ValidateCipher
+            // 
+            this.ClientSize = new System.Drawing.Size(143, 85);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.button1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Name = "ValidateCipher";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Cipher password";
+            this.Visible = false;
+            this.Load += new System.EventHandler(this.Validate_Load);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        private void Validate_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string decrypted = Crypto.Decrypt(ciphertext, textBox1.Text);
+            if(decrypted != null && decrypted.Length > 0)
+            {
+                cipher.SetPassword(decrypted);
+                cipher.Show();
+                this.Visible = false;
+            } else
+            {
+                MessageBox.Show("could not decrypt the password, have you tried to type the cipher correctly?", "error!");
+            }
+        }
+    }
 }
