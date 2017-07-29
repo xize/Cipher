@@ -39,11 +39,6 @@ namespace CipherKeepass
         private ToolStripMenuItem menuitem;
         private ToolStripSeparator menuseperator;
         private static Icon ico = new Window().Icon;
-
-        //private DeCipher decipherwindow;
-        ///private DeCipherQR decipherwindowqr;
-        //private Cipher cipherwindow;
-
         private ToolStripMenuItem decipher_pass;
         private ToolStripMenuItem decipher_as_qr;
         private ToolStripMenuItem cipher;
@@ -52,9 +47,6 @@ namespace CipherKeepass
         public override bool Initialize(IPluginHost pl)
         {
             this.pl = pl;
-           // this.decipherwindow = new DeCipher();
-           // this.decipherwindowqr = new DeCipherQR();
-           // this.cipherwindow = new Cipher(pl);
 
             setupContextMenu();
 
@@ -223,6 +215,7 @@ namespace CipherKeepass
 
         private void OnMenuDoSomething(object sender, EventArgs e)
         {
+            MessageBox.Show("NOTE: this feature will be removed in the future\nto access our new features please right click a password entry", "Warning!");
             Cipher window = new Cipher(pl);
             window.Show();
         }
