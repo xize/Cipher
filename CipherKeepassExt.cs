@@ -71,13 +71,13 @@ namespace CipherKeepass
         private void OnCloseDecipherQRWindow(object sender, FormClosingEventArgs e)
         {
             //cleanup everything.
-            
             d.Hide();
             e.Cancel = true;
         }
 
         private void OnCloseDecipherWindow(object sender, FormClosingEventArgs e)
         {
+            d.phrase.Text = "";
             d.Hide();
             e.Cancel = true;
         }
