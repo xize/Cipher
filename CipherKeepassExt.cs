@@ -266,6 +266,16 @@ namespace CipherKeepass
         public DeCipher()
         {
             InitializeComponent();
+            this.KeyDown += new KeyEventHandler(OnInvokeNextEvent);
+            this.phrase.KeyDown += new KeyEventHandler(OnInvokeNextEvent);
+        }
+
+        private void OnInvokeNextEvent(object sender, KeyEventArgs e)
+        {
+            if(e.KeyData == Keys.Enter)
+            {
+                nextbtn.PerformClick();
+            }
         }
 
         public void SetEncryptedPassword(string pass)
@@ -604,6 +614,17 @@ namespace CipherKeepass
             this.pl = pl;
             this.validate = new ValidateAddedCipher(this, pl);
             InitializeComponent();
+            this.KeyDown += new KeyEventHandler(OnInvokeNext);
+            this.textBox1.KeyDown += new KeyEventHandler(OnInvokeNext);
+            this.textBox2.KeyDown += new KeyEventHandler(OnInvokeNext);
+        }
+
+        private void OnInvokeNext(object sender, KeyEventArgs e)
+        {
+            if(e.KeyData == Keys.Enter)
+            {
+                button1.PerformClick();
+            }
         }
 
         public void SetPassword(string password)
@@ -797,7 +818,17 @@ namespace CipherKeepass
             this.FormClosing += new FormClosingEventHandler(OnValidateAddedCipherCloseEvent);
             this.pl = pl;
             InitializeComponent();
+            this.KeyDown += new KeyEventHandler(OnInvokeNext);
+            textBox1.KeyDown += new KeyEventHandler(OnInvokeNext);
            // this.FormClosing += new FormClosingEventHandler(DisableCloseEvent);
+        }
+
+        private void OnInvokeNext(object sender, KeyEventArgs e)
+        {
+            if(e.KeyData == Keys.Enter)
+            {
+                button1.PerformClick();
+            }
         }
 
         private void OnValidateAddedCipherCloseEvent(object sender, FormClosingEventArgs e)
@@ -920,6 +951,16 @@ namespace CipherKeepass
             this.cipher = cipher;
             this.ciphertext = ciphertext;
             InitializeComponent();
+            this.textBox1.KeyDown += new KeyEventHandler(OnInvokeNext);
+            this.KeyDown += new KeyEventHandler(OnInvokeNext);
+        }
+
+        private void OnInvokeNext(object sender, KeyEventArgs e)
+        {
+            if(e.KeyData == Keys.Enter)
+            {
+                button1.PerformClick();
+            }
         }
 
         private void InitializeComponent()
