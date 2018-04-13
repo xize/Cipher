@@ -43,10 +43,20 @@ namespace CipherKeepass
         private ToolStripMenuItem decipher_as_qr;
         private ToolStripMenuItem cipher;
         private ToolStripMenuItem cipherren;
+        private Cipher c;
+        private DeCipher d;
+        private DeCipherQR dq;
 
         public override bool Initialize(IPluginHost pl)
         {
             this.pl = pl;
+            this.c = new Cipher(this.pl);
+            this.d = new DeCipher();
+            this.dq = new DeCipherQR();
+
+            c.FormClosing += new FormClosingEventHandler(OnCloseCipherWindow);
+            d.FormClosing += new FormClosingEventHandler(OnCloseDecipherWindow);
+            dq.FormClosing += new FormClosingEventHandler(OnCloseDecipherQRWindow);
 
             setupContextMenu();
 
@@ -56,6 +66,26 @@ namespace CipherKeepass
             this.menuseperator = (ToolStripSeparator)toolstripdata[0];
 
             return true;
+        }
+
+        private void OnCloseDecipherQRWindow(object sender, FormClosingEventArgs e)
+        {
+            //cleanup everything.
+            
+            d.Hide();
+            e.Cancel = true;
+        }
+
+        private void OnCloseDecipherWindow(object sender, FormClosingEventArgs e)
+        {
+            d.Hide();
+            e.Cancel = true;
+        }
+
+        private void OnCloseCipherWindow(object sender, FormClosingEventArgs e)
+        {
+            c.Hide();
+            e.Cancel = true;
         }
 
         private void setupContextMenu()
@@ -134,7 +164,7 @@ namespace CipherKeepass
                 return;
             }
             ProtectedString pass = entry.Strings.Get("Password");
-            ValidateCipher val = new ValidateCipher(new Cipher(this.pl), pass.ReadString());
+            ValidateCipher val = new ValidateCipher(c, pass.ReadString());
             val.Show();
         }
 
@@ -147,7 +177,7 @@ namespace CipherKeepass
                 return;
             }
             ProtectedString pass = entry.Strings.Get("Password");
-            Cipher cipherwindow = new Cipher(pl);
+            Cipher cipherwindow = c;
             cipherwindow.SetPassword(pass.ReadString());
             cipherwindow.ShowDialog();
         }
@@ -164,7 +194,7 @@ namespace CipherKeepass
             //ProtectedString user = entry.Strings.Get("UserName");
             ProtectedString pass = entry.Strings.Get("Password");
 
-            DeCipher decipherwindow = new DeCipher();
+            DeCipher decipherwindow = d;
             decipherwindow.SetEncryptedPassword(pass.ReadString());
             decipherwindow.ShowDialog();
             
@@ -182,7 +212,7 @@ namespace CipherKeepass
             ProtectedString user = entry.Strings.Get("UserName");
             ProtectedString pass = entry.Strings.Get("Password");
 
-            DeCipherQR decipherwindowqr = new DeCipherQR();
+            DeCipherQR decipherwindowqr = dq;
             decipherwindowqr.SetEncryptedPassword(pass.ReadString());
             decipherwindowqr.ShowDialog();
         }
