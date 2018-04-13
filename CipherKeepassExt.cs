@@ -589,8 +589,8 @@ namespace CipherKeepass
     class Cipher : Form
     {
         private Label label1;
-        private TextBox textBox1;
-        private TextBox textBox2;
+        public TextBox textBox1;
+        public TextBox textBox2;
         private Button button1;
         private Label label3;
         private Label label4;
@@ -770,6 +770,9 @@ namespace CipherKeepass
                 MessageBox.Show("the secret phrases need to match or your decryption will fail!", "the phrases did not match!");
             }
             this.Visible = false;
+            this.password = "";
+            this.textBox1.Text = "";
+            this.textBox2.Text = "";
             this.DialogResult = DialogResult.OK;
         }
 
@@ -791,9 +794,16 @@ namespace CipherKeepass
         public ValidateAddedCipher(Cipher win, IPluginHost pl)
         {
             this.cipherwindw = win;
+            this.FormClosing += new FormClosingEventHandler(OnValidateAddedCipherCloseEvent);
             this.pl = pl;
             InitializeComponent();
            // this.FormClosing += new FormClosingEventHandler(DisableCloseEvent);
+        }
+
+        private void OnValidateAddedCipherCloseEvent(object sender, FormClosingEventArgs e)
+        {
+            this.Visible = false;
+            e.Cancel = true;
         }
 
         public void SetCipher(string cipher)
@@ -892,6 +902,7 @@ namespace CipherKeepass
                 MessageBox.Show("failed to decrypt password, please redo the phrases!", "error!");
                 cipherwindw.Visible = true;
             }
+            this.cipher = "";
             this.Visible = false;
         }
     }
