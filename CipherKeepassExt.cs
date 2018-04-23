@@ -29,6 +29,7 @@ using System.IO;
 using Cipher.src.libs.zxing;
 using ZXing;
 using ZXing.Common;
+using KeePassLib.Interfaces;
 
 namespace CipherKeepass
 {
@@ -51,7 +52,7 @@ namespace CipherKeepass
         {
             this.pl = pl;
             this.c = new Cipher(this.pl);
-            this.d = new DeCipher();
+            this.d = new DeCipher(this.pl);
             this.dq = new DeCipherQR();
 
             c.FormClosing += new FormClosingEventHandler(OnCloseCipherWindow);
@@ -258,21 +259,26 @@ namespace CipherKeepass
 
     class DeCipher : Form
     {
+        private IPluginHost pl;
         public TextBox phrase;
         private Button nextbtn;
         private Label label1;
         private string pass;
+        private CheckBox checkBox1;
 
-        public DeCipher()
+        public DeCipher(IPluginHost pl)
         {
             InitializeComponent();
+            this.pl = pl;
+            ToolTip tip = new ToolTip();
+            tip.SetToolTip(checkBox1, "this will not update the phrase inside keepass, however it will be re-encrypted to make it look its changed");
             this.KeyDown += new KeyEventHandler(OnInvokeNextEvent);
             this.phrase.KeyDown += new KeyEventHandler(OnInvokeNextEvent);
         }
 
         private void OnInvokeNextEvent(object sender, KeyEventArgs e)
         {
-            if(e.KeyData == Keys.Enter)
+            if (e.KeyData == Keys.Enter)
             {
                 nextbtn.PerformClick();
             }
@@ -286,14 +292,31 @@ namespace CipherKeepass
         private async void btnOnClick(Object sender, EventArgs e)
         {
             string password = Crypto.Decrypt(pass, phrase.Text);
+            string p = phrase.Text;
             if (password.Length == 0)
             {
                 return;
             }
             this.DialogResult = DialogResult.OK;
             Clipboard.SetText(password, TextDataFormat.Text);
-            MessageBox.Show("The password has been deciphered and added to the clipboard", "success!");
+            MessageBox.Show("The password has been deciphered and added to the clipboard"+ (checkBox1.Checked ? ", make sure to save the database again since the entry has been changed!" : ""), "success!");
+
+            if (checkBox1.Checked)
+            {
+                PwEntry entry = pl.MainWindow.GetSelectedEntry(true);
+                if (entry == null)
+                {
+                    MessageBox.Show("the selection is empty!", "error no entry has been selected!");
+                }
+                else
+                {
+                    entry.Strings.Set("Password", new ProtectedString(true, Crypto.Encrypt(password, p)));
+                }
+            }
+
             await Task.Delay(18000);
+            password = null;
+            p = null;
             Clipboard.Clear();
         }
 
@@ -302,6 +325,7 @@ namespace CipherKeepass
             this.label1 = new System.Windows.Forms.Label();
             this.phrase = new System.Windows.Forms.TextBox();
             this.nextbtn = new System.Windows.Forms.Button();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -326,25 +350,38 @@ namespace CipherKeepass
             this.nextbtn.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.nextbtn.Location = new System.Drawing.Point(0, 64);
             this.nextbtn.Name = "nextbtn";
-            this.nextbtn.Size = new System.Drawing.Size(124, 23);
+            this.nextbtn.Size = new System.Drawing.Size(212, 23);
             this.nextbtn.TabIndex = 2;
             this.nextbtn.Text = "decrypt";
             this.nextbtn.UseVisualStyleBackColor = true;
-            this.nextbtn.Click += new EventHandler(btnOnClick);
+            this.nextbtn.Click += new System.EventHandler(this.btnOnClick);
             // 
-            // Gui
+            // checkBox1
             // 
-            this.ClientSize = new System.Drawing.Size(124, 87);
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Checked = true;
+            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1.Location = new System.Drawing.Point(119, 30);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(91, 17);
+            this.checkBox1.TabIndex = 3;
+            this.checkBox1.Text = "update entry?";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // DeCipher
+            // 
+            this.ClientSize = new System.Drawing.Size(212, 87);
+            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.nextbtn);
             this.Controls.Add(this.phrase);
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "Gui";
-            this.Text = "Decrypt cipher";
+            this.Name = "DeCipher";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Icon = CipherKeepassExt.getIcon();
+            this.Text = "Decrypt cipher";
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
     }
 
@@ -924,11 +961,9 @@ namespace CipherKeepass
                 PwEntry entry = pl.MainWindow.GetSelectedEntry(true);
                 if (entry != null)
                 {
-                    MessageBox.Show("added the cipher to the clipboard please paste your cipher with ctrl+v in the password fields!", "success!");
+                    MessageBox.Show("updated password with cipher!\n\nplease make sure you save it since we have not figured out to tell keepass that the db is changed", "success!");
+                    entry.Strings.Set("Password", new ProtectedString(true, cipher));
                     this.Visible = false;
-                    Clipboard.SetText(cipher, TextDataFormat.Text);
-                    await Task.Delay(18000);
-                    Clipboard.Clear();
                     this.Close();
                 }
                 else
