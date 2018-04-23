@@ -617,6 +617,15 @@ namespace CipherKeepass
             this.KeyDown += new KeyEventHandler(OnInvokeNext);
             this.textBox1.KeyDown += new KeyEventHandler(OnInvokeNext);
             this.textBox2.KeyDown += new KeyEventHandler(OnInvokeNext);
+            this.FormClosing += new FormClosingEventHandler(OnClose);
+        }
+
+        private void OnClose(object sender, FormClosingEventArgs e)
+        {
+            this.textBox1.Text = "";
+            this.textBox2.Text = "";
+            this.Hide();
+            e.Cancel = true;
         }
 
         private void OnInvokeNext(object sender, KeyEventArgs e)
@@ -820,7 +829,14 @@ namespace CipherKeepass
             InitializeComponent();
             this.KeyDown += new KeyEventHandler(OnInvokeNext);
             textBox1.KeyDown += new KeyEventHandler(OnInvokeNext);
-           // this.FormClosing += new FormClosingEventHandler(DisableCloseEvent);
+            this.FormClosing += new FormClosingEventHandler(OnClose);
+        }
+
+        private void OnClose(object sender, FormClosingEventArgs e)
+        {
+            this.textBox1.Text = "";
+            this.Hide();
+            e.Cancel = true;
         }
 
         private void OnInvokeNext(object sender, KeyEventArgs e)
@@ -892,14 +908,6 @@ namespace CipherKeepass
             this.ResumeLayout(false);
             this.PerformLayout();
 
-        }
-
-        private void DisableCloseEvent(object sender, FormClosingEventArgs e)
-        {
-            if (e.CloseReason == CloseReason.UserClosing)
-            {
-                e.Cancel = true;
-            }
         }
 
         private void Validate_Load(object sender, EventArgs e)
