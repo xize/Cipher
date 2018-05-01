@@ -130,7 +130,7 @@ namespace CipherKeepass
             PwEntry entry = pl.MainWindow.GetSelectedEntry(true);
             if (entry != null)
             {
-                return entry.HasTag("ciphered");
+                return entry.HasTag("cipher");
             }
             return false;
         }
@@ -310,7 +310,8 @@ namespace CipherKeepass
                 }
                 else
                 {
-                    entry.Strings.Set("Password", new ProtectedString(true, Crypto.Encrypt(password, p)));
+                    //entry.Strings.Set("Password", new ProtectedString(true, Crypto.Encrypt(password, p)));
+                    KeepassHelper.GetKeepass(pl).SetPassword(entry, password, p);
                 }
             }
 
@@ -962,7 +963,8 @@ namespace CipherKeepass
                 if (entry != null)
                 {
                     MessageBox.Show("updated password with cipher!\n\nplease make sure you save it since we have not figured out to tell keepass that the db is changed", "success!");
-                    entry.Strings.Set("Password", new ProtectedString(true, cipher));
+                    //entry.Strings.Set("Password", new ProtectedString(true, cipher));
+                    KeepassHelper.GetKeepass(pl).SetPassword(entry, decrypted, textBox1.Text);
                     this.Visible = false;
                     this.Close();
                 }
@@ -1075,6 +1077,45 @@ namespace CipherKeepass
             {
                 MessageBox.Show("could not decrypt the password, have you tried to type the cipher correctly?", "error!");
             }
+        }
+    }
+
+    class KeepassHelper
+    {
+        private static KeepassHelper helper;
+        private IPluginHost pl;
+
+        private KeepassHelper(IPluginHost pl) {
+            this.pl = pl;
+        }
+
+        public void SetPassword(PwEntry entry, string password, string phrase)
+        {
+            PwDatabase db = pl.Database;
+            entry.CreateBackup();
+            entry.AddTag("cipher");
+            entry.Strings.Set("Password", new ProtectedString(true, Crypto.Encrypt(password, phrase)));
+            db.Modified = true;
+            pl.MainWindow.UpdateUI(false, null, false, null, false, null, true);
+        }
+
+        public bool IsTagged(PwEntry entry)
+        {
+            return entry.HasTag("cipher");
+        }
+
+        public void RemoveTag(PwEntry entry)
+        {
+            entry.RemoveTag("cipher");
+        }
+
+        public static KeepassHelper GetKeepass(IPluginHost pl)
+        {
+            if(helper == null)
+            {
+                helper = new KeepassHelper(pl);
+            }
+            return helper;
         }
     }
 }
