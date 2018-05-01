@@ -72,7 +72,7 @@ namespace CipherKeepass
         private void OnCloseDecipherQRWindow(object sender, FormClosingEventArgs e)
         {
             //cleanup everything.
-            d.Hide();
+            dq.Hide();
             e.Cancel = true;
         }
 
