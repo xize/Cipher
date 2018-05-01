@@ -59,12 +59,8 @@ namespace CipherKeepass
             d.FormClosing += new FormClosingEventHandler(OnCloseDecipherWindow);
             dq.FormClosing += new FormClosingEventHandler(OnCloseDecipherQRWindow);
 
+            
             setupContextMenu();
-
-            object[] toolstripdata = addMenuItem("Cipher", OnMenuDoSomething);
-
-            this.menuitem = (ToolStripMenuItem)toolstripdata[1];
-            this.menuseperator = (ToolStripSeparator)toolstripdata[0];
 
             return true;
         }
@@ -130,7 +126,7 @@ namespace CipherKeepass
             PwEntry entry = pl.MainWindow.GetSelectedEntry(true);
             if (entry != null)
             {
-                return entry.HasTag("cipher");
+                return KeepassHelper.GetKeepass(pl).IsTagged(entry);
             }
             return false;
         }
@@ -220,7 +216,6 @@ namespace CipherKeepass
 
         public override void Terminate()
         {
-            removeMenuItem(menuitem, menuseperator, OnMenuDoSomething);
         }
 
         private object[] addMenuItem(string name, EventHandler e)
@@ -242,13 +237,6 @@ namespace CipherKeepass
             item.Click -= e;
             menu.Remove(seperator);
             menu.Remove(item);
-        }
-
-        private void OnMenuDoSomething(object sender, EventArgs e)
-        {
-            MessageBox.Show("NOTE: this feature will be removed in the future\nto access our new features please right click a password entry", "Warning!");
-            Cipher window = new Cipher(pl);
-            window.Show();
         }
 
         public static Icon getIcon()
